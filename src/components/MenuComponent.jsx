@@ -7,12 +7,19 @@ export default class MenuComponent extends Component {
 
     state = {
         series: [],
-        seriesOpen: false
+        seriesOpen: false,
+        menuOpen: false
     }
 
     toggleSeries = () => {
         this.setState((state) => ({
             seriesOpen: !state.seriesOpen
+        }))
+    }
+
+    toggleMenu = () => {
+        this.setState((state) => ({
+            menuOpen: !state.menuOpen
         }))
     }
 
@@ -30,29 +37,37 @@ export default class MenuComponent extends Component {
 
     render() {
         return (
-            <nav className="bg-neutral-primary w-full z-20 start-0 border-default">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <button data-collapse-toggle="navbar-dropdown" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary" aria-controls="navbar-dropdown" aria-expanded="false">
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14" /></svg>
+            <nav className="sticky top-0 z-20 w-full border-b border-slate-700/70 bg-slate-950/95 text-white shadow-lg shadow-slate-950/20 backdrop-blur">
+                <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4 py-3 sm:px-6">
+                    <NavLink to="/" className="group flex items-center gap-3" aria-label="SeriesHub, ir al inicio">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-lg font-black text-slate-950 shadow-lg shadow-cyan-500/20 transition-transform group-hover:scale-105">
+                            S
+                        </span>
+                        <span className="text-xl font-bold tracking-tight text-white">
+                            Series<span className="text-cyan-400">Hub</span>
+                        </span>
+                    </NavLink>
+                    <button onClick={this.toggleMenu} data-collapse-toggle="navbar-dropdown" type="button" className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 transition hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 md:hidden" aria-controls="navbar-dropdown" aria-expanded={this.state.menuOpen}>
+                        <span className="sr-only">{this.state.menuOpen ? 'Close main menu' : 'Open main menu'}</span>
+                        <svg className="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14" /></svg>
                     </button>
-                    <div className="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-                        <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-neutral-primary">
-                            <li>
-                                <NavLink to="/" className="block py-2 px-3 text-black bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0" aria-current="page">Home</NavLink>
+                    <div className={`${this.state.menuOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} id="navbar-dropdown">
+                        <ul className="mt-4 flex flex-col gap-1 rounded-xl border border-slate-800 bg-slate-900 p-2 font-medium md:mt-0 md:flex-row md:items-center md:gap-2 md:border-0 md:bg-transparent md:p-0">
+                            <li className="relative">
+                                <NavLink to="/" className={({ isActive }) => `block rounded-lg px-4 py-2.5 transition ${isActive ? 'bg-cyan-400/10 text-cyan-300' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`} aria-current="page">Inicio</NavLink>
                             </li>
                             <li>
-                                <button id="dropdownNvbarButton" type="button" onClick={this.toggleSeries} aria-expanded={this.state.seriesOpen} aria-controls="dropdownNavbar" data-dropdown-toggle="dropdownNavbar" className="flex items-center justify-between w-full py-2 px-3 rounded font-medium text-heading md:w-auto hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0">
+                                <button id="dropdownNvbarButton" type="button" onClick={this.toggleSeries} aria-expanded={this.state.seriesOpen} aria-controls="dropdownNavbar" data-dropdown-toggle="dropdownNavbar" className="flex w-full items-center justify-between rounded-lg px-4 py-2.5 font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white md:w-auto">
                                     Series
-                                    <svg className="w-4 h-4 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" /></svg>
+                                    <svg className={`ml-2 h-4 w-4 transition-transform ${this.state.seriesOpen ? 'rotate-180' : ''}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7" /></svg>
                                 </button>
-                                <div id="dropdownNavbar" className={`z-10 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44 ${this.state.seriesOpen ? '' : 'hidden'}`}>
-                                    <ul className="p-2 text-sm text-body font-medium" aria-labelledby="dropdownNvbarButton">
+                                <div id="dropdownNavbar" className={`mt-1 w-full rounded-xl border border-slate-700 bg-slate-800 shadow-xl shadow-slate-950/30 md:absolute md:mt-3 md:w-56 ${this.state.seriesOpen ? '' : 'hidden'}`}>
+                                    <ul className="p-2 text-sm font-medium text-slate-300" aria-labelledby="dropdownNvbarButton">
                                         {
                                             this.state.series.map((serie, index) => {
                                                 return (
                                                     <li key={index}>
-                                                        <NavLink to={"/serie/" + serie.idSerie} className="block py-2 px-4 rounded hover:bg-neutral-tertiary">{serie.nombre}</NavLink>
+                                                        <NavLink onClick={() => this.setState({ seriesOpen: false, menuOpen: false })} to={"/serie/" + serie.idSerie} className="block rounded-lg px-3 py-2 transition hover:bg-slate-700 hover:text-cyan-300">{serie.nombre}</NavLink>
                                                     </li>
                                                 )
                                             })
@@ -61,10 +76,10 @@ export default class MenuComponent extends Component {
                                 </div>
                             </li>
                             <li>
-                                <NavLink to="#" className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Pricing</NavLink>
+                                <NavLink to="/crear" className="block rounded-lg px-4 py-2.5 text-slate-300 transition hover:bg-slate-800 hover:text-white">Crear Personaje</NavLink>
                             </li>
                             <li>
-                                <NavLink to="#" className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Contact</NavLink>
+                                <NavLink to="/modificar" className="block rounded-lg px-4 py-2.5 text-slate-300 transition hover:bg-slate-800 hover:text-white">Modificar Personaje</NavLink>
                             </li>
                         </ul>
                     </div>
